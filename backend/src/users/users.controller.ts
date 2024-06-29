@@ -6,9 +6,12 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from '@prisma/client';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -19,6 +22,13 @@ export class UsersController {
     return this.usersService.create(data);
   }
 
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  async getProfile(@Request() req) {
+    return req.user
+  }
+
+  @UseGuards(AuthGuard)
   @Get()
   async findAll() {
     return this.usersService.findAll();
@@ -28,6 +38,7 @@ export class UsersController {
   async findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
+
 
   @Put(':id')
   async update(@Param('id') id: string, @Body() data: User) {

@@ -6,12 +6,18 @@ import { PrismaService } from 'src/database/PrismaService';
 export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
-  async create(data: User) {
+  async create(data: User): Promise<any> {
     return await this.prismaService.user.create({ data });
   }
 
-  async findAll() {
+  async findAll(): Promise<any> {
     return await this.prismaService.user.findMany();
+  }
+
+  async findUserByEmail(email: string): Promise<User> {
+    return await this.prismaService.user.findUnique({
+      where: { email },
+    });
   }
 
   async findOne(id: number) {
