@@ -13,9 +13,10 @@ export class LoginService {
   constructor(private httpClient: HttpClient) { }
 
   login(email: string, password: string): Observable<LoginRequest> {
-    return this.httpClient.post<LoginRequest>(`${this.baseUrl}/auth/login`, {
-      email,
-      password
-    });
+    const data = {
+      "email": email,
+      "password": password
+    };
+    return this.httpClient.post<LoginRequest>(`${this.baseUrl}/auth/login`, data);
   }
 }
