@@ -1,0 +1,12 @@
+<label
+  [for]="inputName"
+  class="block text-gray-300 font-bold mb-2">
+  {{ label }}:
+</label>
+<input
+  class="form-input w-full"
+  [type]="type"
+  [placeholder]="placeholder"
+  [value]="value"
+  (input)="onInput($event)"
+/>
