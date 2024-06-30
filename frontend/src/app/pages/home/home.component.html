@@ -1,2 +1,88 @@
-<app-toolbar></app-toolbar>
-<p>home works!</p>
+<app-toolbar username="Fulano de tal">
+  <app-button label="Logout" (clickEvent)="onLogout()"></app-button>
+</app-toolbar>
+
+<section id="product-form">
+  <div class="flex justify-center items-center mt-5">
+    <app-button label="Cadastrar Produto" (clickEvent)="openProdDialog()">
+    </app-button>
+    <div class="ml-3">
+      <app-button label="Realizar Transação" (clickEvent)="openTransactionDialog()">
+      </app-button>
+    </div>
+  </div>
+  <app-dialog [isOpen]="isProdDialog">
+    <app-form-layout titulo="Cadastro de Produto">
+      <form [formGroup]="productForm">
+        <div class="mb-4">
+          <app-input
+            formControlName="code"
+            inputName="code"
+            label="Código"
+            type="text"
+            placeholder="Código do produto">
+          </app-input>
+        </div>
+        <div class="mb-4">
+          <app-input
+            formControlName="description"
+            inputName="description"
+            label="Descrição"
+            type="text"
+            placeholder="Descrição do produto">
+          </app-input>
+        </div>
+        <div class="mb-4">
+          <app-input
+            formControlName="enterDate"
+            inputName="enterDate"
+            label="Entrada"
+            type="datetime-local"
+            placeholder="Data de entrada do produto">
+          </app-input>
+        </div>
+        <div class="mb-4">
+          <app-input
+            formControlName="validateDate"
+            inputName="validateDate"
+            label="Validade"
+            type="datetime-local"
+            placeholder="Validade do produto">
+          </app-input>
+        </div>
+        <div class="flex ittems-center justify-between">
+          <app-button label="Cadastrar" (clickEvent)="onProdCreate()"></app-button>
+          <app-button label="Fechar" (clickEvent)="closeProdDialog()"></app-button>
+        </div>
+      </form>
+    </app-form-layout>
+  </app-dialog>
+  <app-dialog [isOpen]="isTransactionDialog">
+    <app-form-layout titulo="Realizando Transação">
+      <form [formGroup]="transactionForm">
+        <div class="mb-4">
+          <app-input
+            formControlName="qtdPaid"
+            inputName="qtdPaid"
+            label="Quantidade"
+            type="number"
+            placeholder="Quantidade do produto paga">
+          </app-input>
+        </div>
+        <div class="mb-4">
+          <app-input
+            formControlName="deliveryData"
+            inputName="deliveryData"
+            label="Entrega"
+            type="datetime-local"
+            placeholder="Data da entrega">
+          </app-input>
+        </div>
+        <div class="flex items-center justify-between">
+          <app-button label="Realizar Transação"></app-button>
+          <app-button label="Fechar"></app-button>
+        </div>
+      </form>
+    </app-form-layout>
+  </app-dialog>
+</section>
