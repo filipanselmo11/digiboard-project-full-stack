@@ -14,7 +14,7 @@ constructor(private usersService: UsersService, private jwtService: JwtService) 
 
         const payload = {
             sub: user.id,
-            username: user.email
+            username: user.name
         };
 
         return {

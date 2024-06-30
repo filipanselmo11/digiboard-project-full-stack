@@ -20,14 +20,6 @@ export class UsersService {
     });
   }
 
-  async findOne(id: number): Promise<User> {
-    return await this.prismaService.user.findFirst({
-      where: {
-        id: Number(id),
-      },
-    });
-  }
-
   async update(id: number, data: User) {
     return await this.prismaService.user.update({
       data,
