@@ -21,11 +21,17 @@ export class TransacaoService {
 
   create(qtdPaid: number, deliveryData: string, userId: number, productId: number): Observable<any> {
     const data = {
-      qtdPaid: qtdPaid,
-      deliveryData: deliveryData,
-      userId: userId,
-      productId: productId
+      "qtdPaid": qtdPaid,
+      "deliveryData": deliveryData,
+      "userId": userId,
+      "productId": productId
     }
     return this.httpClient.post(`${this.baseUrl}/transactions/create`, data);
   }
+
+  getTransactions(): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/transactions`);
+  }
+
+
 }

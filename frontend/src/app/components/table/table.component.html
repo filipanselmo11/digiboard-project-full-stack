@@ -1,0 +1,40 @@
+<div class="overflow-x-auto">
+  <table class="w-full bg-gray-600 pa-6">
+    <thead>
+      <tr>
+        <th
+          class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-semibold text-gray-600">
+          Data de Entrega
+        </th>
+        <th
+          class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-semibold text-gray-600">
+          Nome do Produto
+        </th>
+        <th
+          class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-semibold text-gray-600">
+          Quantidade Paga
+        </th>
+        <th
+          class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-semibold text-gray-600">
+          Nome do Usuário
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let transaction of transactions; let i = index">
+        <td class="py-2 px-4 border-b border-gray-200 text-sm text-gray-200 text-center">
+          {{ transaction.deliveryData }}
+        </td>
+        <td class="py-2 px-4 border-b border-gray-200 text-sm text-gray-200 text-center">
+          {{ transaction.productName }}
+        </td>
+        <td class="py-2 px-4 border-b border-gray-200 text-sm text-gray-200 text-center">
+          {{ transaction.qtdPaid }}
+        </td>
+        <td class="py-2 px-4 border-b border-gray-200 text-sm text-gray-200 text-center">
+          {{ transaction.userName }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

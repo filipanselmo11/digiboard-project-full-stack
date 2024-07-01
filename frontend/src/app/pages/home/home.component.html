@@ -121,3 +121,15 @@
     </app-form-layout>
   </app-dialog>
 </section>
+
+<section id="transactions-table">
+  <div *ngIf="isLoading" class="flex justify-center items-center mt-5">
+    <h2>Carregando Histórico de Transações...</h2>
+  </div>
+  <div *ngIf="!isLoading" class="flex justify-center items-center mt-5">
+    <h2>Histórico de Transações</h2><br/>
+  </div>
+  <div class="px-4 py-8 mt-4">
+    <app-table [transactions]="transactions"></app-table>
+  </div>
+</section>

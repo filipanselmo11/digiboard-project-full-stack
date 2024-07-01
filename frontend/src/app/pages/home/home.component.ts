@@ -12,6 +12,7 @@ import { httpInterceptorProviders } from '../../helpers/http.interceptor';
 import { CardComponent } from '../../components/card/card.component';
 import { CommonModule } from '@angular/common';
 import { TransacaoService } from '../../services/transacao.service';
+import { TableComponent } from '../../components/table/table.component';
 
 
 @Component({
@@ -25,7 +26,8 @@ import { TransacaoService } from '../../services/transacao.service';
       ButtonComponent,
       DialogComponent,
       ReactiveFormsModule,
-      CardComponent
+      CardComponent,
+      TableComponent
     ],
   providers: [ httpInterceptorProviders],
   templateUrl: './home.component.html',
@@ -38,6 +40,7 @@ export class HomeComponent implements OnInit {
   isLoading: boolean = true;
   productForm: FormGroup;
   products: any[] = [];
+  transactions: any[] = [];
   transactionForm: FormGroup;
 
   constructor(
@@ -61,16 +64,17 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.getProfile().subscribe({
-      next: data => {
-        console.log('Data ', data);
-        this.currentUser = data;
-      },
-      error: err => {
-        console.error(err.error.message);
-      }
-    });
+    // this.authService.getProfile().subscribe({
+    //   next: data => {
+    //     console.log('Data ', data);
+    //     this.currentUser = data;
+    //   },
+    //   error: err => {
+    //     console.error(err.error.message);
+    //   }
+    // });
     this.getProducts();
+    this.getTransactions();
     // this.loadTransactionForm();
   }
 
@@ -132,6 +136,19 @@ export class HomeComponent implements OnInit {
         console.log('Compra realizada');
         console.log('Data ', data);
         this.closeTransactionDialog();
+      },
+      error: err => {
+        console.error(err.error.message);
+      }
+    });
+  }
+
+  getTransactions() {
+    this.transacaoService.getTransactions().subscribe({
+      next: data => {
+        this.transactions = data;
+        console.log('Transaction array ', this.transactions);
+        this.isLoading = false;
       },
       error: err => {
         console.error(err.error.message);
