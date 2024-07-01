@@ -22,4 +22,8 @@ export class ProdutoService {
 
     return this.httpClient.post<ProdutoRequest>(`${this.baseUrl}/products/create`, data);
   }
+
+  getProducts(): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/products`);
+  }
 }

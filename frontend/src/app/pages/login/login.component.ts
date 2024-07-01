@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormLayoutComponent } from '../../components/form-layout/form-layout.component';
 import { InputComponent } from '../../components/input/input.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonComponent } from '../../components/button/button.component';
 import { Router } from '@angular/router';
-import { LoginService } from '../../services/login.service';
+import { AuthService } from '../../services/auth.service';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -13,15 +14,24 @@ import { LoginService } from '../../services/login.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
+  isLoggedIn: boolean = false;
+  roles: string[] = [];
 
-  constructor(private router: Router, private loginService: LoginService) {
+  constructor(private router: Router, private authService: AuthService, private storageService: StorageService) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
     });
+  }
+
+  ngOnInit(): void {
+    if (this.storageService.isLoggedIn()) {
+      this.isLoggedIn = true;
+      this.roles = this.storageService.getUser().roles;
+    }
   }
 
   onCadastro() {
@@ -29,13 +39,20 @@ export class LoginComponent {
   }
 
   onLogin() {
-    this.loginService.login(
+    this.authService.login(
       this.loginForm.value.email,
       this.loginForm.value.password
-    ).subscribe((res) => {
-      console.log('BEm vindo(a)');
-      console.log('REs ', res);
-      this.router.navigate(['home']);
-    }, (error) => console.error(error));
+    ).subscribe({
+      next: data => {
+        console.log('DAta ', data);
+        this.storageService.saveUser(data);
+        this.isLoggedIn = true;
+        this.roles = this.storageService.getUser().roles;
+        this.router.navigate(['home']);
+      },
+      error: err => {
+        console.error(err.error.message);
+      }
+    });
   }
 }

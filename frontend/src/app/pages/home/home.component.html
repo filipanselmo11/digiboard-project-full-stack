@@ -1,4 +1,4 @@
-<app-toolbar username="Fulano de tal">
+<app-toolbar username="currentUser.username">
   <app-button label="Logout" (clickEvent)="onLogout()"></app-button>
 </app-toolbar>
 
@@ -6,10 +6,6 @@
   <div class="flex justify-center items-center mt-5">
     <app-button label="Cadastrar Produto" (clickEvent)="openProdDialog()">
     </app-button>
-    <div class="ml-3">
-      <app-button label="Realizar Transação" (clickEvent)="openTransactionDialog()">
-      </app-button>
-    </div>
   </div>
   <app-dialog [isOpen]="isProdDialog">
     <app-form-layout titulo="Cadastro de Produto">
@@ -37,7 +33,7 @@
             formControlName="enterDate"
             inputName="enterDate"
             label="Entrada"
-            type="datetime-local"
+            type="date"
             placeholder="Data de entrada do produto">
           </app-input>
         </div>
@@ -46,7 +42,7 @@
             formControlName="validateDate"
             inputName="validateDate"
             label="Validade"
-            type="datetime-local"
+            type="date"
             placeholder="Validade do produto">
           </app-input>
         </div>
@@ -57,8 +53,27 @@
       </form>
     </app-form-layout>
   </app-dialog>
+</section>
+
+<section id="prod-cards">
+  <div *ngIf="isLoading" class="flex justify-center items-center mt-5">
+    <h2>Carregando Produtos...</h2>
+  </div>
+  <div *ngIf="!isLoading" class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <app-card
+        *ngFor="let product of products"
+        [id]="product.id"
+        [code]="product.code"
+        [description]="product.description"
+        [enterDate]="product.enterDate"
+        [validateDate]="product.validateDate">
+          <app-button label="Comprar" (clickEvent)="openTransactionDialog()"></app-button>
+      </app-card>
+    </div>
+  </div>
   <app-dialog [isOpen]="isTransactionDialog">
-    <app-form-layout titulo="Realizando Transação">
+    <app-form-layout titulo="Realizando Compra">
       <form [formGroup]="transactionForm">
         <div class="mb-4">
           <app-input
@@ -74,13 +89,33 @@
             formControlName="deliveryData"
             inputName="deliveryData"
             label="Entrega"
-            type="datetime-local"
+            type="date"
             placeholder="Data da entrega">
           </app-input>
         </div>
+        <div class="mb-4">
+          <app-input
+            formControlName="userId"
+            inputName="userId"
+            label="IdUsuário"
+            type="number"
+            placeholder="Id do usuário"
+          >
+          </app-input>
+        </div>
+        <div class="mb-4">
+          <app-input
+            formControlName="productId"
+            inputName="productId"
+            label="IdProduto"
+            type="number"
+            placeholder="Id do produto"
+          >
+          </app-input>
+        </div>
         <div class="flex items-center justify-between">
-          <app-button label="Realizar Transação"></app-button>
-          <app-button label="Fechar"></app-button>
+          <app-button label="Realizar Compra" (clickEvent)="onTransactionCreate()"></app-button>
+          <app-button label="Fechar" (clickEvent)="closeTransactionDialog()"></app-button>
         </div>
       </form>
     </app-form-layout>

@@ -29,9 +29,14 @@ export class CadastroComponent {
       this.cadastroForm.value.email,
       this.cadastroForm.value.name,
       this.cadastroForm.value.password
-    ).subscribe((res) => {
-      console.log('REs ', res);
-      this.router.navigate(['login']);
-    }, (error) => console.error(error));
+    ).subscribe({
+      next: data => {
+        console.log('DAta ', data);
+        this.router.navigate(['login']);
+      },
+      error: err => {
+        console.error(err.error.message);
+      }
+    });
   }
 }

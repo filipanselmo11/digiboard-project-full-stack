@@ -7,7 +7,7 @@ export class ProductsService {
     constructor(private prismaService: PrismaService) {}
 
     async create(data: Product): Promise<any> {
-        return await this.prismaService.product.create({ data });
+        return await this.prismaService.product.create({ data })
     }
 
     async findAll(): Promise<any> {

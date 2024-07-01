@@ -29,8 +29,8 @@ model Product {
   id  Int  @id  @default(autoincrement())
   code  String  @unique
   description  String
-  enterDate  DateTime
-  validateDate  DateTime
+  enterDate  String
+  validateDate  String
   transactions Transaction[]
 
   @@map("products")
@@ -39,7 +39,7 @@ model Product {
 model Transaction {
   id  Int  @id  @default(autoincrement())
   qtdPaid  Int
-  deliveryData  DateTime
+  deliveryData  String
   userId  Int
   productId  Int
   user  User  @relation(fields: [userId], references: [id])

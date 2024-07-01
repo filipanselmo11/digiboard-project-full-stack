@@ -29,6 +29,12 @@ export class UsersController {
   }
 
   @Public()
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.usersService.findOne(+id);
+  }
+
+  @Public()
   @Put(':id')
   async update(@Param('id') id: string, @Body() data: User) {
     return this.usersService.update(+id, data);
