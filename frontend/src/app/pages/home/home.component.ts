@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ToolbarComponent } from '../../components/toolbar/toolbar.component';
 import { ButtonComponent } from '../../components/button/button.component';
 import { DialogComponent } from '../../components/dialog/dialog.component';
@@ -33,7 +33,7 @@ import { TableComponent } from '../../components/table/table.component';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnChanges {
   currentUser: any;
   isProdDialog: boolean = false;
   isTransactionDialog: boolean = false;
@@ -76,6 +76,12 @@ export class HomeComponent implements OnInit {
     this.getProducts();
     this.getTransactions();
     // this.loadTransactionForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['products']) {
+      console.log('Products foi atualizado');
+    }
   }
 
   // loadTransactionForm() {

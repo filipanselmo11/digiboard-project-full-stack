@@ -5,16 +5,18 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ButtonComponent } from '../../components/button/button.component';
 import { Router } from '@angular/router';
 import { CadastroService } from '../../services/cadastro.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [ FormLayoutComponent, InputComponent, ReactiveFormsModule, ButtonComponent ],
+  imports: [ FormLayoutComponent, InputComponent, ReactiveFormsModule, ButtonComponent, CommonModule ],
   templateUrl: './cadastro.component.html',
   styleUrl: './cadastro.component.css'
 })
 export class CadastroComponent {
   cadastroForm: FormGroup;
+  cadastrando: boolean = true;
 
   constructor(private router: Router, private cadastroService: CadastroService) {
     this.cadastroForm = new FormGroup({
@@ -25,6 +27,7 @@ export class CadastroComponent {
   }
 
   onCadastro() {
+    this.cadastrando = false;
     this.cadastroService.create(
       this.cadastroForm.value.email,
       this.cadastroForm.value.name,
