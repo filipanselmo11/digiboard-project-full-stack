@@ -1,24 +1,69 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
-import { JwtService } from '@nestjs/jwt';
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { User } from "@prisma/client";
+import { PrismaService } from "src/database/PrismaService";
+import { CreateUserDto, LoginUserDto } from "src/users/dto/users.user.dto";
+import { UsersService } from "src/users/users.service";
+import { JwtPayload } from "./strategies/jwt.strategy";
+
 
 @Injectable()
 export class AuthService {
-constructor(private usersService: UsersService, private jwtService: JwtService) {}
+    constructor(
+        private jwtService: JwtService,
+        private userService: UsersService,
+        private prisma: PrismaService,
+    ) {}
 
-    async login(email: string, password: string): Promise<{ access_token: string }> {
-        const user = await this.usersService.findUserByEmail(email);
-        if (user?.password !== password) {
-            throw new UnauthorizedException();
+    async register(userDto: CreateUserDto): Promise<RegistrationStatus> {
+        let status: RegistrationStatus = {
+            success: true,
+            message: 'Usuário criado com sucesso',
+        };
+
+        try {
+            status.dataUser = await this.userService.create(userDto);
+        } catch (error) {
+            status = {
+                success: false,
+                message: error,
+            };
         }
 
-        const payload = {
-            sub: user.id,
-            username: user.name
-        };
+        return status;
+    }
 
+    async login(loginUserDto: LoginUserDto): Promise<any> {
+        const user = await this.userService.findByLogin(loginUserDto);
+        const token = this._createToken(user);
+        
         return {
-            access_token: await this.jwtService.signAsync(payload),
+            ...token,
+            data: user,
         };
     }
+
+    async validateUser(payload: JwtPayload): Promise<any> {
+        const user = await this.userService.findByPayload(payload);
+        if (!user) {
+            throw new HttpException('Token Inválido', HttpStatus.UNAUTHORIZED);
+        }
+
+        return user;
+    }
+
+    private _createToken({ username }): any {
+        const user: JwtPayload = { username };
+        const Authorization = this.jwtService.sign(user);
+        return {
+            expiresIn: '2hr',
+            Authorization,
+        };
+    }
+}
+
+export interface RegistrationStatus {
+    success: boolean;
+    message: string;
+    dataUser?: User;
 }

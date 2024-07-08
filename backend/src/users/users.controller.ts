@@ -1,48 +1,26 @@
 import {
-  Body,
+  ClassSerializerInterceptor,
   Controller,
-  Delete,
   Get,
-  Param,
-  Post,
-  Put,
+  Request,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from '@prisma/client';
-import { Public } from 'src/auth/decorators/public.decorator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { ApiBearerAuth, ApiSecurity, ApiTags } from '@nestjs/swagger';
 
-
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private usersService: UsersService) {}
 
-  @Public()
-  @Post('create')
-  async create(@Body() data: User) {
-    return this.usersService.create(data);
-  }
-
-  @Public()
-  @Get()
-  async findAll() {
-    return this.usersService.findAll();
-  }
-
-  @Public()
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
-  }
-
-  @Public()
-  @Put(':id')
-  async update(@Param('id') id: string, @Body() data: User) {
-    return this.usersService.update(+id, data);
-  }
-  
-  @Public()
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiSecurity('access-key')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('me')
+  public async getProfile(@Request() req) {
+    return req.user;
   }
 }
