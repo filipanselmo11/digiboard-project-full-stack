@@ -3,6 +3,7 @@ import { Product } from '@prisma/client';
 import { PrismaService } from 'src/database/PrismaService';
 import { CreateProductDto } from './dto/products.product.dto';
 
+
 @Injectable()
 export class ProductsService {
     constructor(private prisma: PrismaService) { }
