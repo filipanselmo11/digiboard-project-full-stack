@@ -44,13 +44,13 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new HttpException('credenciais inválidas', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('Usuário ou senha incorretos', HttpStatus.UNAUTHORIZED);
     }
 
     const equal = await compare(password, user.password);
 
     if (!equal) {
-      throw new HttpException('credenciais inválidas', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('Usuário ou senha incorretos', HttpStatus.UNAUTHORIZED);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Product } from '@prisma/client';
 import { PrismaService } from 'src/database/PrismaService';
-import { CreateProductDto } from './dto/products.product';
+import { CreateProductDto } from './dto/products.product.dto';
 
 @Injectable()
 export class ProductsService {
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService) { }
 
     async create(productDto: CreateProductDto): Promise<any> {
         try {
@@ -17,9 +17,8 @@ export class ProductsService {
                     validateDate: productDto.validateDate,
                 },
             });
-
             return createdProduct;
-        } catch(error) {
+        } catch (error) {
             console.error(error);
             throw new HttpException(
                 'Erro ao criar produto',
@@ -29,12 +28,33 @@ export class ProductsService {
     }
 
     async findAll(): Promise<any> {
-        return await this.prisma.product.findMany();
+        try {
+            const products = await this.prisma.product.findMany();
+            return products;
+        } catch (error) {
+            console.error(error);
+            throw new HttpException(
+                'Erro ao listar produtos',
+                HttpStatus.INTERNAL_SERVER_ERROR,
+            );
+        }
     }
 
     async findProductByCode(code: string): Promise<Product> {
-        return await this.prisma.product.findUnique({
-            where: { code },
-        });
+        try {
+            const product = await this.prisma.product.findFirst({
+                where: { code },
+            });
+            return product;
+        } catch (error) {
+            console.error(error);
+            throw new HttpException(
+                'Erro ao buscar código do produto',
+                HttpStatus.INTERNAL_SERVER_ERROR,
+            );
+        }
+        // return await this.prisma.product.findUnique({
+        //     where: { code },
+        // });
     }
 }

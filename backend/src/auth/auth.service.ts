@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { User } from "@prisma/client";
+import { Product, Transaction, User } from "@prisma/client";
 import { PrismaService } from "src/database/PrismaService";
 import { CreateUserDto, LoginUserDto } from "src/users/dto/users.user.dto";
 import { UsersService } from "src/users/users.service";
@@ -66,4 +66,6 @@ export interface RegistrationStatus {
     success: boolean;
     message: string;
     dataUser?: User;
+    dataProduct?: Product;
+    dataTransaction?: Transaction;
 }
