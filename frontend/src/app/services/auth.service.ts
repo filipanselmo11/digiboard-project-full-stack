@@ -8,11 +8,6 @@ import { Observable, tap } from 'rxjs';
 export class AuthService {
 
   baseUrl = 'http://localhost:3000';
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  };
 
   constructor(private httpClient:HttpClient) { }
 
@@ -21,21 +16,19 @@ export class AuthService {
       "username": username,
       "password": password,
     };
-    return this.httpClient.post(
+    return this.httpClient.post<any>(
       `${this.baseUrl}/auth/login`,
       data,
-      this.httpOptions
+    ).pipe(
+      tap(response => localStorage.setItem('token', response.token))
     );
   }
 
   getMe(): Observable<any> {
-    return this.httpClient.get<any>(
-      `${this.baseUrl}/users/me`,
-      this.httpOptions
-    );
+    return this.httpClient.get<any>(`${this.baseUrl}/users/me`);
   }
 
-  // logout(): Observable<any> {
-  //   return this.httpClient.post()
-  // }
+  logout(): void {
+    localStorage.removeItem('token');
+  }
 }

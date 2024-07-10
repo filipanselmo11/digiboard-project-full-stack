@@ -64,18 +64,9 @@ export class HomeComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    // this.authService.getProfile().subscribe({
-    //   next: data => {
-    //     console.log('Data ', data);
-    //     this.currentUser = data;
-    //   },
-    //   error: err => {
-    //     console.error(err.error.message);
-    //   }
-    // });
-    this.getProducts();
-    this.getTransactions();
-    // this.loadTransactionForm();
+    this.getCurrentUser();
+    // this.getProducts();
+    // this.getTransactions();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -84,17 +75,8 @@ export class HomeComponent implements OnInit, OnChanges {
     }
   }
 
-  // loadTransactionForm() {
-  //   this.transacaoService.getUserId().subscribe(userId => {
-  //     this.transactionForm.patchValue({ userId });
-  //   });
-
-  //   this.transacaoService.getProductId().subscribe(productId => {
-  //     this.transactionForm.patchValue({ productId });
-  //   });
-  // }
-
   onLogout() {
+    this.authService.logout();
     this.router.navigate(['login']);
   }
 
@@ -113,6 +95,18 @@ export class HomeComponent implements OnInit, OnChanges {
       },
       error : err => {
         console.error(err.error.message);
+      }
+    });
+  }
+
+  getCurrentUser() {
+    this.authService.getMe().subscribe({
+      next: data => {
+        console.log('Data ', data);
+        this.currentUser = data;
+      },
+      error: err => {
+        console.error(err);
       }
     });
   }

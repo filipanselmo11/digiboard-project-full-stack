@@ -8,11 +8,6 @@ import { Observable } from 'rxjs';
 export class CadastroService {
 
   baseUrl = 'http://localhost:3000';
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  };
 
   constructor(private httpClient: HttpClient) { }
 
@@ -23,10 +18,6 @@ export class CadastroService {
       "username": username,
       "password": password
     };
-    return this.httpClient.post(
-      `${this.baseUrl}/auth/register`,
-      data,
-      this.httpOptions
-    );
+    return this.httpClient.post(`${this.baseUrl}/auth/register`, data);
   }
 }

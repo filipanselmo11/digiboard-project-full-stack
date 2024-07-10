@@ -54,10 +54,10 @@ export class AuthService {
 
     private _createToken({ username }): any {
         const user: JwtPayload = { username };
-        const Authorization = this.jwtService.sign(user);
+        const token = this.jwtService.sign(user);
         return {
             expiresIn: '2hr',
-            Authorization,
+            token,
         };
     }
 }
