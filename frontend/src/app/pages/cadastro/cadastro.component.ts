@@ -22,24 +22,30 @@ export class CadastroComponent {
     this.cadastroForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       name: new FormControl('', [Validators.required]),
+      username: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required]),
     });
   }
 
   onCadastro() {
-    this.cadastrando = false;
-    this.cadastroService.create(
-      this.cadastroForm.value.email,
-      this.cadastroForm.value.name,
-      this.cadastroForm.value.password
-    ).subscribe({
-      next: data => {
-        console.log('DAta ', data);
-        this.router.navigate(['login']);
-      },
-      error: err => {
-        console.error(err.error.message);
-      }
-    });
+    if (this.cadastroForm.valid) {
+      this.cadastrando = false;
+      this.cadastroService.create(
+        this.cadastroForm.value.email,
+        this.cadastroForm.value.name,
+        this.cadastroForm.value.username,
+        this.cadastroForm.value.password
+      ).subscribe({
+        next: data => {
+          console.log('DATA ', data);
+          this.router.navigate(['login']);
+        },
+        error: err => {
+          console.error(err.error.message);
+        }
+      })
+    } else {
+      console.error('Cadastro Form Error');
+    }
   }
 }

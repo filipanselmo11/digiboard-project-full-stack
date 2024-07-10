@@ -4,32 +4,61 @@
       <app-input
         formControlName="name"
         inputName="name"
-        label="Nome"
+        label="Nome*"
         type="text"
         placeholder="Fulano(a) de tal">
       </app-input>
+      <div *ngIf="cadastroForm.get('name')?.invalid && cadastroForm.get('name')?.touched">
+        <small *ngIf="cadastroForm.get('name')?.errors?.['required']">
+          O nome é um campo obrigatório
+        </small>
+      </div>
     </div>
     <div class="mb-4">
       <app-input
         formControlName="email"
         inputName="email"
-        label="Email"
+        label="Email*"
         type="email"
         placeholder="fulano(a)@email.com">
       </app-input>
+      <div *ngIf="cadastroForm.get('email')?.invalid && cadastroForm.get('email')?.touched">
+        <small *ngIf="cadastroForm.get('email')?.errors?.['required']">
+          O email é um campo obrigatório
+        </small>
+      </div>
+    </div>
+    <div class="mb-4">
+      <app-input
+        formControlName="username"
+        inputName="username"
+        label="Username*"
+        type="text"
+        placeholder="fulano11, fulano_silva">
+      </app-input>
+      <div *ngIf="cadastroForm.get('username')?.invalid && cadastroForm.get('username')?.touched">
+        <small *ngIf="cadastroForm.get('username')?.errors?.['required']">
+          O username é um campo obrigatório
+        </small>
+      </div>
     </div>
     <div class="mb-4">
       <app-input
         formControlName="password"
         inputName="password"
-        label="Password"
+        label="Password*"
         type="password"
         placeholder="Digite uma senha">
       </app-input>
+      <div *ngIf="cadastroForm.get('password')?.invalid && cadastroForm.get('password')?.touched">
+        <small *ngIf="cadastroForm.get('password')?.errors?.['required']">
+          O password é um campo obrigatório
+        </small>
+      </div>
     </div>
     <div class="mb-4">
       <app-button *ngIf="!cadastrando" label="Cadastrando..."></app-button>
-      <app-button *ngIf="cadastrando" label="Cadastrar" (clickEvent)="onCadastro()"></app-button>
+      <app-button *ngIf="cadastrando" label="Cadastrar" [disabled]="cadastroForm.invalid" (clickEvent)="onCadastro()"></app-button>
     </div>
   </form>
 </app-form-layout>

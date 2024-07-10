@@ -54,8 +54,5 @@ export class ProductsService {
                 HttpStatus.INTERNAL_SERVER_ERROR,
             );
         }
-        // return await this.prisma.product.findUnique({
-        //     where: { code },
-        // });
     }
 }

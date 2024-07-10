@@ -16,8 +16,11 @@ export class AuthService {
 
   constructor(private httpClient:HttpClient) { }
 
-  login(email: string, password: string): Observable<any> {
-    const data = { email, password };
+  login(username: string, password: string): Observable<any> {
+    const data = {
+      "username": username,
+      "password": password,
+    };
     return this.httpClient.post(
       `${this.baseUrl}/auth/login`,
       data,
@@ -25,9 +28,9 @@ export class AuthService {
     );
   }
 
-  getProfile(): Observable<any> {
+  getMe(): Observable<any> {
     return this.httpClient.get<any>(
-      `${this.baseUrl}/auth/profile`,
+      `${this.baseUrl}/users/me`,
       this.httpOptions
     );
   }
