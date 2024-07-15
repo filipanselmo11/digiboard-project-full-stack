@@ -8,11 +8,11 @@ import { FormLayoutComponent } from '../../components/form-layout/form-layout.co
 import { InputComponent } from '../../components/input/input.component';
 import { ProdutoService } from '../../services/produto.service';
 import { AuthService } from '../../services/auth.service';
-import { httpInterceptorProviders } from '../../helpers/http.interceptor';
 import { CardComponent } from '../../components/card/card.component';
 import { CommonModule } from '@angular/common';
 import { TransacaoService } from '../../services/transacao.service';
 import { TableComponent } from '../../components/table/table.component';
+import { UsuarioService } from '../../services/usuario.service';
 
 
 @Component({
@@ -27,14 +27,17 @@ import { TableComponent } from '../../components/table/table.component';
       DialogComponent,
       ReactiveFormsModule,
       CardComponent,
-      TableComponent
+      TableComponent,
     ],
-  providers: [ httpInterceptorProviders],
+    providers: [
+      UsuarioService,
+      AuthService,
+    ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit, OnChanges {
-  currentUser: any;
+  user: any;
   isProdDialog: boolean = false;
   isTransactionDialog: boolean = false;
   isLoading: boolean = true;
@@ -47,7 +50,8 @@ export class HomeComponent implements OnInit, OnChanges {
     private router: Router,
     private produtoService: ProdutoService,
     private authService: AuthService,
-    private transacaoService: TransacaoService) {
+    private transacaoService: TransacaoService,
+    private usuarioService: UsuarioService) {
     this.productForm = new FormGroup({
       code: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
@@ -64,9 +68,9 @@ export class HomeComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.getCurrentUser();
-    // this.getProducts();
-    // this.getTransactions();
+    this.getUser();
+    this.getProducts();
+    this.getTransactions();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -99,14 +103,13 @@ export class HomeComponent implements OnInit, OnChanges {
     });
   }
 
-  getCurrentUser() {
-    this.authService.getMe().subscribe({
-      next: data => {
-        console.log('Data ', data);
-        this.currentUser = data;
+  getUser() {
+    this.usuarioService.getMe().subscribe({
+      next: user => {
+        this.user = user.name;
       },
       error: err => {
-        console.error(err);
+        console.error('User error ', err.error.message);
       }
     });
   }

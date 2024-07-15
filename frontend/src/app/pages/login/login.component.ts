@@ -39,7 +39,6 @@ export class LoginComponent {
         this.loginForm.value.password
       ).subscribe({
         next: data => {
-          console.log('DATA ', data);
           this.router.navigate(['home']);
         },
         error: err => {

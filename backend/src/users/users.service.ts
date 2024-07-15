@@ -3,6 +3,7 @@ import { User } from '@prisma/client';
 import { PrismaService } from 'src/database/PrismaService';
 import { CreateUserDto, LoginUserDto } from './dto/users.user.dto';
 import { compare, hash } from 'bcrypt';
+import { JwtPayload } from 'src/auth/strategies/jwt.strategy';
 
 interface FormatLogin extends Partial<User> {
   username: string;
@@ -58,7 +59,8 @@ export class UsersService {
     return rest;
   }
 
-  async findByPayload({ username }): Promise<any> {
+  async findByPayload(payload: JwtPayload): Promise<User> | undefined {
+    const { username } = payload;
     return await this.prisma.user.findFirst({
       where: { username },
     });

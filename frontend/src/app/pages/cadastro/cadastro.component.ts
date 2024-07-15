@@ -48,4 +48,8 @@ export class CadastroComponent {
       console.error('Cadastro Form Error');
     }
   }
+
+  onLogin() {
+    this.router.navigate(['/login']);
+  }
 }

@@ -44,12 +44,15 @@ export class AuthService {
     }
 
     async validateUser(payload: JwtPayload): Promise<any> {
+        console.log('Validando usuário com payload ', payload);
         const user = await this.userService.findByPayload(payload);
-        if (!user) {
-            throw new HttpException('Token Inválido', HttpStatus.UNAUTHORIZED);
+        if (user) {
+            console.log('Usuário encontrado ', user);
+            return user;  
         }
+        console.log('Usuário não encotrado');
+        throw new HttpException('Token Inválido', HttpStatus.UNAUTHORIZED);
 
-        return user;
     }
 
     private _createToken({ username }): any {

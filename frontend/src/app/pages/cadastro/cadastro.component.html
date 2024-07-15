@@ -56,9 +56,10 @@
         </small>
       </div>
     </div>
-    <div class="mb-4">
+    <div class="flex items-center justify-between">
       <app-button *ngIf="!cadastrando" label="Cadastrando..."></app-button>
       <app-button *ngIf="cadastrando" label="Cadastrar" [disabled]="cadastroForm.invalid" (clickEvent)="onCadastro()"></app-button>
+      <app-button label="Login" (clickEvent)="onLogin()"></app-button>
     </div>
   </form>
 </app-form-layout>

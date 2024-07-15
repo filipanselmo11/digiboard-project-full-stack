@@ -12,23 +12,32 @@ export class AuthService {
   constructor(private httpClient:HttpClient) { }
 
   login(username: string, password: string): Observable<any> {
-    const data = {
-      "username": username,
-      "password": password,
-    };
-    return this.httpClient.post<any>(
+    const data = { username, password };
+    // const data = {
+    //   "username": username,
+    //   "password": password,
+    // };
+    return this.httpClient.post(
       `${this.baseUrl}/auth/login`,
       data,
     ).pipe(
-      tap(response => localStorage.setItem('token', response.token))
+        tap((response: any) => {
+          console.log('Login Response ', response.token);
+          localStorage.setItem('token', response.token);
+        })
     );
   }
 
-  getMe(): Observable<any> {
-    return this.httpClient.get<any>(`${this.baseUrl}/users/me`);
+  setToken(token: string): void {
+    localStorage.setItem('token', token);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 
   logout(): void {
     localStorage.removeItem('token');
+    console.log('TOKEN REMOVIDO ', this.getToken());
   }
 }
