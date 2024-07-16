@@ -2,6 +2,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
+  Param,
   Request,
   UseGuards,
   UseInterceptors,
@@ -22,5 +23,14 @@ export class UsersController {
   @Get('me')
   public async getProfile(@Request() req) {
     return req.user;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiSecurity('access-key')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get(':id')
+  public async findById(@Param('id') id:string) {
+    return this.usersService.findById(+id);
   }
 }

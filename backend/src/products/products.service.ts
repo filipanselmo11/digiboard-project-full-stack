@@ -55,4 +55,18 @@ export class ProductsService {
             );
         }
     }
+
+    async findById(id: number): Promise<any> {
+        try {
+            const productId = await this.prisma.product.findFirst({
+                where: { id: Number(id) },
+            });
+            return productId;
+        } catch (error) {
+            throw new HttpException(
+                'Produto não encontrado',
+                HttpStatus.INTERNAL_SERVER_ERROR,
+            )
+        }
+    }
 }

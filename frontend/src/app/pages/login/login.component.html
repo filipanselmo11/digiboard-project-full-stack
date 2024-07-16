@@ -32,4 +32,10 @@
       <app-button label="Cadastre-se" (clickEvent)="onCadastro()"></app-button>
     </div>
   </form>
+  <!-- <div *ngIf="showAlert">
+  </div> -->
+  <app-alert
+    [class]="'fixed bottom-4 right-4 max-w-xs w-full bg-green-500 text-white text-sm font-bold px-4 py-3 rounded'"
+    [message]="'Login realizado com sucesso'"
+    [showAlert]="showAlert"></app-alert>
 </app-form-layout>

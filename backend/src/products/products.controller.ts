@@ -37,4 +37,13 @@ export class ProductsController {
   public async findProductByCode(@Param('code') code: string) {
     return this.productsService.findProductByCode(code);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiSecurity('access-key')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get(':id')
+  public async findProductById(@Param('id') id:string) {
+    return this.productsService.findById(+id);
+  }
 }

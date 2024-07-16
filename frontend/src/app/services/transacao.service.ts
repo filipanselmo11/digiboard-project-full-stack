@@ -12,21 +12,19 @@ export class TransacaoService {
 
   constructor(private httpClient: HttpClient, private authService: AuthService) { }
 
-  // getUserId(id: number): Observable<any> {
-  //   return this.httpClient.get(`${this.baseUrl}/users/${id}`);
-  // }
+  getProdId(id: number): Observable<any> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.httpClient.get(`${this.baseUrl}/products/${id}`, { headers });
+  }
 
-  // getProductId(id: number): Observable<any> {
-  //   return this.httpClient.get(`${this.baseUrl}/products/${id}`);
-  // }
+  getUserId(id: number): Observable<any> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.httpClient.get(`${this.baseUrl}/users/${id}`, { headers });
+  }
 
   create(qtdPaid: number, deliveryData: string, userId: number, productId: number): Observable<any> {
-    // const data = {
-    //   "qtdPaid": qtdPaid,
-    //   "deliveryData": deliveryData,
-    //   "userId": userId,
-    //   "productId": productId
-    // }
 
     const data = { qtdPaid, deliveryData, userId, productId };
 

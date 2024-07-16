@@ -47,7 +47,8 @@
           </app-input>
         </div>
         <div class="flex ittems-center justify-between">
-          <app-button label="Cadastrar" (clickEvent)="onProdCreate()"></app-button>
+          <app-button *ngIf="!cadastrando" label="Cadastrando..."></app-button>
+          <app-button *ngIf="cadastrando" label="Cadastrar" (clickEvent)="onProdCreate()"></app-button>
           <app-button label="Fechar" (clickEvent)="closeProdDialog()"></app-button>
         </div>
       </form>
@@ -62,7 +63,7 @@
   <div *ngIf="!isLoading" class="container mx-auto px-4 py-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <app-card
-        *ngFor="let product of products"
+        *ngFor="let product of products$ | async"
         [id]="product.id"
         [code]="product.code"
         [description]="product.description"
@@ -98,8 +99,8 @@
             formControlName="userId"
             inputName="userId"
             label="IdUsuário"
-            type="number"
-            placeholder="Id do usuário"
+            type="text"
+            [disabled]="true"
           >
           </app-input>
         </div>
@@ -108,8 +109,8 @@
             formControlName="productId"
             inputName="productId"
             label="IdProduto"
-            type="number"
-            placeholder="Id do produto"
+            type="text"
+            readonly
           >
           </app-input>
         </div>

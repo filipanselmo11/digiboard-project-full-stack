@@ -22,6 +22,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input() label!: string;
   @Input() inputName!: string;
   @Input() type: InputTypes = "email";
+  @Input() disabled?: boolean;
 
   value!: string;
 

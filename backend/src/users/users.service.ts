@@ -65,4 +65,18 @@ export class UsersService {
       where: { username },
     });
   }
+
+  async findById(id: number): Promise<any> {
+    try {
+      const userId = await this.prisma.user.findFirst({
+        where: { id: Number(id) },
+      });
+      return userId;
+    } catch (error) {
+      throw new HttpException(
+        'Usuário não encontrado',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      )
+    }
+  }
 }

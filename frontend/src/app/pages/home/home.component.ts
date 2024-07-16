@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ToolbarComponent } from '../../components/toolbar/toolbar.component';
 import { ButtonComponent } from '../../components/button/button.component';
 import { DialogComponent } from '../../components/dialog/dialog.component';
@@ -13,36 +13,38 @@ import { CommonModule } from '@angular/common';
 import { TransacaoService } from '../../services/transacao.service';
 import { TableComponent } from '../../components/table/table.component';
 import { UsuarioService } from '../../services/usuario.service';
+import { Observable } from 'rxjs';
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-      CommonModule,
-      FormLayoutComponent,
-      InputComponent,
-      ToolbarComponent,
-      ButtonComponent,
-      DialogComponent,
-      ReactiveFormsModule,
-      CardComponent,
-      TableComponent,
-    ],
-    providers: [
-      UsuarioService,
-      AuthService,
-    ],
+    CommonModule,
+    FormLayoutComponent,
+    InputComponent,
+    ToolbarComponent,
+    ButtonComponent,
+    DialogComponent,
+    ReactiveFormsModule,
+    CardComponent,
+    TableComponent,
+  ],
+  providers: [
+    UsuarioService,
+    AuthService,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit, OnChanges {
+export class HomeComponent implements OnInit {
   user: any;
   isProdDialog: boolean = false;
   isTransactionDialog: boolean = false;
   isLoading: boolean = true;
+  cadastrando: boolean = true;
   productForm: FormGroup;
-  products: any[] = [];
+  products$: Observable<any[]>;
   transactions: any[] = [];
   transactionForm: FormGroup;
 
@@ -62,21 +64,18 @@ export class HomeComponent implements OnInit, OnChanges {
     this.transactionForm = new FormGroup({
       qtdPaid: new FormControl(0, [Validators.required, Validators.pattern('^[0-9]*$')]),
       deliveryData: new FormControl('', [Validators.required]),
-      userId: new FormControl(0, [Validators.required]),
-      productId: new FormControl(0, [Validators.required]),
+      userId: new FormControl(''),
+      productId: new FormControl(''),
     });
+
+    this.products$ = this.produtoService.prods$;
+
+
   }
 
   ngOnInit(): void {
     this.getUser();
-    this.getProducts();
     this.getTransactions();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['products']) {
-      console.log('Products foi atualizado');
-    }
   }
 
   onLogout() {
@@ -85,44 +84,38 @@ export class HomeComponent implements OnInit, OnChanges {
   }
 
   onProdCreate() {
-    console.log('Product Form ', this.productForm.value);
-    this.produtoService.create(
-      this.productForm.value.code,
-      this.productForm.value.description,
-      this.productForm.value.enterDate,
-      this.productForm.value.validateDate,
-    ).subscribe({
-      next: data => {
-        console.log('Produto cadastrado');
-        console.log('Data ', data);
-        this.closeProdDialog();
-      },
-      error : err => {
-        console.error(err.error.message);
-      }
-    });
+    if (this.productForm.valid) {
+      this.cadastrando = false;
+      this.produtoService.create(
+        this.productForm.value.code,
+        this.productForm.value.description,
+        this.productForm.value.enterDate,
+        this.productForm.value.validateDate,
+      ).subscribe({
+        next: data => {
+          console.log('Produto cadastrado');
+          console.log('Data ', data);
+          this.closeProdDialog();
+        },
+        error: err => {
+          console.error(err.error.message);
+        }
+      });
+    } else {
+      console.log('Product Form error');
+    }
   }
 
   getUser() {
     this.usuarioService.getMe().subscribe({
       next: user => {
         this.user = user.name;
-      },
-      error: err => {
-        console.error('User error ', err.error.message);
-      }
-    });
-  }
-
-  getProducts() {
-    this.produtoService.getProducts().subscribe({
-      next: data => {
-        this.products = data;
-        console.log('Products Array ', this.products);
-        this.isLoading = false;
-      },
-      error: err => {
-        console.error(err.error.message);
+        this.transacaoService.getUserId(user.id).subscribe((userData: any) => {
+          console.log('User Data ', userData);
+          this.transactionForm.patchValue({ userId: userData.id });
+        });
+      }, error: err => {
+        console.error(err);
       }
     });
   }
