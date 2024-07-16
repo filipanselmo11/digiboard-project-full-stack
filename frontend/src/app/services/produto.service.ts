@@ -17,12 +17,18 @@ export class ProdutoService {
     this.getProducts();
   }
 
-   private getProducts() {
+  getProducts() {
     const token = this.authService.getToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.httpClient.get<any[]>(`${this.baseUrl}/products`, { headers }).subscribe(products => {
       this.prodSubject.next(products);
     });
+  }
+
+  getProds():Observable<any[]> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.httpClient.get<any[]>(`${this.baseUrl}/products`, { headers });
   }
 
   create(code: string, description: string, enterDate: string, validateDate: string): Observable<any> {

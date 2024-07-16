@@ -75,6 +75,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUser();
+    this.getProds();
     this.getTransactions();
   }
 
@@ -111,10 +112,23 @@ export class HomeComponent implements OnInit {
       next: user => {
         this.user = user.name;
         this.transacaoService.getUserId(user.id).subscribe((userData: any) => {
-          console.log('User Data ', userData);
           this.transactionForm.patchValue({ userId: userData.id });
         });
       }, error: err => {
+        console.error(err);
+      }
+    });
+  }
+
+  getProds() {
+    this.produtoService.getProds().subscribe({
+      next: (prods) => {
+        prods.forEach(prod => {
+          this.transacaoService.getProdId(prod.id).subscribe((productData: any) => {
+            this.transactionForm.patchValue({ productId: productData.id });
+          });
+        })
+      }, error: (err) => {
         console.error(err);
       }
     });
