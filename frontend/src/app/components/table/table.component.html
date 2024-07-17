@@ -8,7 +8,7 @@
         </th>
         <th
           class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-semibold text-gray-600">
-          Nome do Produto
+          Id do Produto
         </th>
         <th
           class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-semibold text-gray-600">
@@ -16,7 +16,7 @@
         </th>
         <th
           class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-semibold text-gray-600">
-          Nome do Usuário
+          Id do Usuário
         </th>
       </tr>
     </thead>
@@ -26,13 +26,13 @@
           {{ transaction.deliveryData }}
         </td>
         <td class="py-2 px-4 border-b border-gray-200 text-sm text-gray-200 text-center">
-          {{ transaction.productName }}
+          {{ transaction.productId }}
         </td>
         <td class="py-2 px-4 border-b border-gray-200 text-sm text-gray-200 text-center">
           {{ transaction.qtdPaid }}
         </td>
         <td class="py-2 px-4 border-b border-gray-200 text-sm text-gray-200 text-center">
-          {{ transaction.userName }}
+          {{ transaction.userId }}
         </td>
       </tr>
     </tbody>

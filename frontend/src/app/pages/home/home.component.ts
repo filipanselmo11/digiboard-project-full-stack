@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit {
     });
 
     this.transactionForm = new FormGroup({
-      qtdPaid: new FormControl(0, [Validators.required, Validators.pattern('^[0-9]*$')]),
+      qtdPaid: new FormControl('', [Validators.required]),
       deliveryData: new FormControl('', [Validators.required]),
       userId: new FormControl(''),
       productId: new FormControl(''),
@@ -135,7 +135,6 @@ export class HomeComponent implements OnInit {
   // }
 
   onTransactionCreate() {
-    console.log('Transaction Form ', this.transactionForm.value);
     this.transacaoService.create(
       this.transactionForm.value.qtdPaid,
       this.transactionForm.value.deliveryData,
@@ -143,7 +142,6 @@ export class HomeComponent implements OnInit {
       this.transactionForm.value.productId
     ).subscribe({
       next: data => {
-        console.log('Compra realizada');
         console.log('Data ', data);
         this.closeTransactionDialog();
       },
