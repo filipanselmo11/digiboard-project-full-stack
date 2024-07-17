@@ -15,10 +15,6 @@ export class TransactionsService {
                     userId: userId,
                     productId: transactionDto.productId,
                 }
-                // data: {
-                //     ...transactionDto,
-                //     userId,
-                // },
             });
             return createdTransaction;
         } catch(error) {
