@@ -69,7 +69,7 @@
         [description]="product.description"
         [enterDate]="product.enterDate"
         [validateDate]="product.validateDate">
-          <app-button label="Comprar" (clickEvent)="openTransactionDialog()"></app-button>
+          <app-button label="Comprar" (clickEvent)="openTransactionDialog(product.id)"></app-button>
       </app-card>
     </div>
   </div>

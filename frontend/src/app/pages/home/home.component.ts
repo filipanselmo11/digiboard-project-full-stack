@@ -75,7 +75,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUser();
-    this.getProds();
+    // this.getProds();
     this.getTransactions();
   }
 
@@ -120,19 +120,19 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  getProds() {
-    this.produtoService.getProds().subscribe({
-      next: (prods) => {
-        prods.forEach(prod => {
-          this.transacaoService.getProdId(prod.id).subscribe((productData: any) => {
-            this.transactionForm.patchValue({ productId: productData.id });
-          });
-        })
-      }, error: (err) => {
-        console.error(err);
-      }
-    });
-  }
+  // getProds() {
+  //   this.produtoService.getProds().subscribe({
+  //     next: (prods) => {
+  //       prods.forEach(prod => {
+  //         this.transacaoService.getProdId(prod.id).subscribe((productData: any) => {
+  //           this.transactionForm.patchValue({ productId: productData.id });
+  //         });
+  //       })
+  //     }, error: (err) => {
+  //       console.error(err);
+  //     }
+  //   });
+  // }
 
   onTransactionCreate() {
     console.log('Transaction Form ', this.transactionForm.value);
@@ -174,8 +174,10 @@ export class HomeComponent implements OnInit {
     this.isProdDialog = false;
   }
 
-  openTransactionDialog() {
+  openTransactionDialog(prodId: number) {
+    this.transactionForm.patchValue({productId: prodId });
     this.isTransactionDialog = true;
+    console.log('Salve prod id ', prodId);
   }
 
   closeTransactionDialog() {
