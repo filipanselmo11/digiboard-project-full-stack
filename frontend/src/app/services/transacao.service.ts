@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -8,14 +8,22 @@ import { AuthService } from './auth.service';
 })
 export class TransacaoService {
 
+  private transactionSubject = new BehaviorSubject<any[]>([]);
+  transactions$ = this.transactionSubject.asObservable();
+
   baseUrl = 'http://localhost:3000';
 
-  constructor(private httpClient: HttpClient, private authService: AuthService) { }
+  constructor(private httpClient: HttpClient, private authService: AuthService) {
+    this.getTransactions();
+  }
 
-  getProdId(id: number): Observable<any> {
+  getTransactions() {
     const token = this.authService.getToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.httpClient.get(`${this.baseUrl}/products/${id}`, { headers });
+    return this.httpClient.get<any[]>(`${this.baseUrl}/transactions`, { headers })
+      .subscribe(transactions => {
+        this.transactionSubject.next(transactions);
+      });
   }
 
   getUserId(id: number): Observable<any> {
@@ -31,13 +39,12 @@ export class TransacaoService {
     const token = this.authService.getToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this.httpClient.post(`${this.baseUrl}/transactions/create`, data, { headers });
-  }
-
-  getTransactions(): Observable<any> {
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.httpClient.get(`${this.baseUrl}/transactions`, { headers });
+    return this.httpClient.post<any>(`${this.baseUrl}/transactions/create`, data, { headers }).pipe(
+      tap(newTransaction => {
+        const currentTransactions = this.transactionSubject.value;
+        this.transactionSubject.next([...currentTransactions, newTransaction]);
+      })
+    );
   }
 
 

@@ -9,5 +9,5 @@ import { Component, Input } from '@angular/core';
   styleUrl: './table.component.css'
 })
 export class TableComponent {
-  @Input() transactions: any[] = [];
+  @Input() transactions: any[] | null = [];
 }

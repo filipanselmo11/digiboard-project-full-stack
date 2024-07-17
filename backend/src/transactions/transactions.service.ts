@@ -10,7 +10,7 @@ export class TransactionsService {
         try {
             const createdTransaction = await this.prisma.transaction.create({
                 data: {
-                    qtdPaid: transactionDto.qtdPaid,
+                    qtdPaid: Number(transactionDto.qtdPaid),
                     deliveryData: transactionDto.deliveryData,
                     userId: userId,
                     productId: transactionDto.productId,

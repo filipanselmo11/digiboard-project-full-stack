@@ -25,12 +25,6 @@ export class ProdutoService {
     });
   }
 
-  // getProds():Observable<any[]> {
-  //   const token = this.authService.getToken();
-  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  //   return this.httpClient.get<any[]>(`${this.baseUrl}/products`, { headers });
-  // }
-
   create(code: string, description: string, enterDate: string, validateDate: string): Observable<any> {
     const token = this.authService.getToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);

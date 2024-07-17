@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
   cadastrando: boolean = true;
   productForm: FormGroup;
   products$: Observable<any[]>;
-  transactions: any[] = [];
+  transactions$ = this.transacaoService.transactions$;
   transactionForm: FormGroup;
 
   constructor(
@@ -70,12 +70,10 @@ export class HomeComponent implements OnInit {
 
     this.products$ = this.produtoService.prods$;
 
-
   }
 
   ngOnInit(): void {
     this.getUser();
-    // this.getProds();
     this.getTransactions();
   }
 
@@ -119,21 +117,6 @@ export class HomeComponent implements OnInit {
       }
     });
   }
-
-  // getProds() {
-  //   this.produtoService.getProds().subscribe({
-  //     next: (prods) => {
-  //       prods.forEach(prod => {
-  //         this.transacaoService.getProdId(prod.id).subscribe((productData: any) => {
-  //           this.transactionForm.patchValue({ productId: productData.id });
-  //         });
-  //       })
-  //     }, error: (err) => {
-  //       console.error(err);
-  //     }
-  //   });
-  // }
-
   onTransactionCreate() {
     this.transacaoService.create(
       this.transactionForm.value.qtdPaid,
@@ -152,15 +135,8 @@ export class HomeComponent implements OnInit {
   }
 
   getTransactions() {
-    this.transacaoService.getTransactions().subscribe({
-      next: data => {
-        this.transactions = data;
-        console.log('Transaction array ', this.transactions);
-        this.isLoading = false;
-      },
-      error: err => {
-        console.error(err.error.message);
-      }
+    this.transacaoService.transactions$.subscribe(() => {
+      this.isLoading = false;
     });
   }
 

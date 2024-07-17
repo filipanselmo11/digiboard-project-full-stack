@@ -131,9 +131,6 @@
     <h2>Histórico de Transações</h2><br/>
   </div>
   <div class="px-4 py-8 mt-4">
-    <app-table [transactions]="transactions"></app-table>
+    <app-table [transactions]="transactions$ | async"></app-table>
   </div>
-  <!-- <div class="flex justify-center items-center mt-5" #elseblock>
-    <h2>Sem transações</h2>
-  </div> -->
 </section>
